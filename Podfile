@@ -5,17 +5,11 @@ target 'edgellmtest' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for edgellmtest
-  pod 'MediaPipeTasksGenAI'
-  pod 'MediaPipeTasksGenAIC'
-
-  target 'edgellmtestTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'edgellmtestUITests' do
-    # Pods for testing
-  end
+   pod 'MediaPipeTasksGenAI', '0.10.24'
+  pod 'MediaPipeTasksGenAIC', '0.10.24'
+  # GPU delegate for Metal
+  pod 'TensorFlowLiteSwift/Metal', '~> 0.0.1-nightly'
+  # Core ML delegate for Apple Neural Engine
+  pod 'TensorFlowLiteSwift/CoreML', '~> 0.0.1-nightly'
 
 end

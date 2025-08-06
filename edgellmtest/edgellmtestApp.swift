@@ -14,6 +14,7 @@ struct edgellmtestApp: App {
             NavigationStack {
                 ContentView()
             }
+            .modelContainer(for: Translation.self)
         }
     }
 }

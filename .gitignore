@@ -31,6 +31,8 @@ DerivedData/
 ## Obj-C/Swift specific
 *.hmap
 
+*.task
+*.bin
 ## App packaging
 *.ipa
 *.dSYM.zip
@@ -125,7 +127,8 @@ playground.xcworkspace
 # Accio dependency management
 Dependencies/
 .accio/
-
+edgellmtest/gemma-3n-E2B-it-int4.task
+edgellmtest/ggml-medium-q5_0.bin
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo.
@@ -145,7 +148,8 @@ Dependencies/
 #           - Also handy if you have a large number of dependant pods
 #           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
 Pods/
-
+Podfile
+Podfile.lock
 ### SwiftPackageManager template
 Packages
 xcuserdata
@@ -153,5 +157,4 @@ xcuserdata
 
 
 ### SwiftPM template
-
 

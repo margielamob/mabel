@@ -9,11 +9,11 @@ import MediaPipeTasksGenAI
 import Foundation
 import ZIPFoundation
 import CoreGraphics // For CGImage
+import TensorFlowLiteC
 
 /// Represents the available LLM models, their bundled filenames, and display names.
 public enum ModelIdentifier: String, CaseIterable, Identifiable {
     case gemma2B = "gemma-3n-E2B-it-int4"
-    case gemma4B = "gemma-3n-E4B-it-int4"
 
     public var id: String { self.rawValue }
     public var fileName: String { "\(self.rawValue).task" }
@@ -21,7 +21,6 @@ public enum ModelIdentifier: String, CaseIterable, Identifiable {
     public var displayName: String {
         switch self {
         case .gemma2B: return "Gemma 3N (2B)"
-        case .gemma4B: return "Gemma 3N (4B)"
         }
     }
 
@@ -37,7 +36,7 @@ public enum ModelIdentifier: String, CaseIterable, Identifiable {
 /// Manages the on-device LLM, including its initialization, model file handling, and vision component extraction.
 struct OnDeviceModel {
     private(set) var inference: LlmInference
-    let identifier: ModelIdentifier // Identifier for the loaded model (e.g., 2B or 4B)
+    let identifier: ModelIdentifier
     
     /// Initializes the `OnDeviceModel` with the specified `ModelIdentifier`.
     /// This involves copying the model `.task` file from the bundle to a cache directory,
@@ -50,7 +49,7 @@ struct OnDeviceModel {
     init(modelIdentifier: ModelIdentifier) throws {
         self.identifier = modelIdentifier
         let fileManager = FileManager.default
-        let cacheDir = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        guard let cacheDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { throw NSError(domain: "ModelSetupError", code: 1000, userInfo: [NSLocalizedDescriptionKey: "Application‑support directory unavailable"])}
         try fileManager.createDirectory(at: cacheDir, withIntermediateDirectories: true, attributes: nil)
 
         // Use modelIdentifier to get the correct model file
@@ -70,8 +69,8 @@ struct OnDeviceModel {
         }
 
         // Define internal filenames for vision components expected within the .task archive
-        let visionEncoderFileName = "TF_LITE_VISION_ENCODER" // Assumed internal name for the vision encoder
-        let visionAdapterFileName = "TF_LITE_VISION_ADAPTER" // Assumed internal name for the vision adapter
+        let visionEncoderFileName = "TF_LITE_VISION_ENCODER"
+        let visionAdapterFileName = "TF_LITE_VISION_ADAPTER"
 
         let extractedVisionEncoderPath = cacheDir.appendingPathComponent(visionEncoderFileName)
         let extractedVisionAdapterPath = cacheDir.appendingPathComponent(visionAdapterFileName)
@@ -100,12 +99,10 @@ struct OnDeviceModel {
             NSLog("Vision models already exist in cache.")
         }
 
-
         let options = LlmInference.Options(modelPath: modelCopyPath.path)
-        options.maxTokens = 1000
+        options.maxTokens = 1500
 
         // Configure options for vision modality.
-        // These paths must point to the extracted model files in the cache directory.
         options.visionEncoderPath = extractedVisionEncoderPath.path
         options.visionAdapterPath = extractedVisionAdapterPath.path
         options.maxImages = 1 // Initial support for single image
@@ -145,7 +142,7 @@ final class Chat {
     private let model: OnDeviceModel
     private var session: LlmInference.Session
     
-    init(model: OnDeviceModel, topK: Int = 40, topP: Float = 0.9, temperature: Float = 0.9, enableVisionModality: Bool = true) throws {
+    init(model: OnDeviceModel, topK: Int = 20, topP: Float = 0.9, temperature: Float = 0.7, enableVisionModality: Bool = true) throws {
       self.model = model
 
       let options = LlmInference.Session.Options()
@@ -187,37 +184,3 @@ final class Chat {
         return try self.session.sizeInTokens(text: text)
     }
 }
-
-func attemptResponse() -> String {
-    var model: OnDeviceModel
-    do {
-        model = try OnDeviceModel(modelIdentifier: .gemma2B) // Default model for test function
-    } catch {
-        let errorMessage = "attemptResponse: Failed to initialize OnDeviceModel: \(error.localizedDescription)"
-        NSLog(errorMessage)
-        return errorMessage
-    }
-    
-    var chat: Chat
-    do {
-        // Pass default values to the updated Chat initializer
-        chat = try Chat(model: model, topK: 40, topP: 0.9, temperature: 0.9, enableVisionModality: true)
-    } catch {
-        let errorMessage = "attemptResponse: Failed to initialize Chat session: \(error.localizedDescription)"
-        NSLog(errorMessage)
-        return errorMessage
-    }
-    
-    var output: String
-    do {
-        output = try chat.sendMessageSync("Hello, what are your abilities?")
-    } catch {
-        let errorMessage = "attemptResponse: sendMessageSync failed: \(error.localizedDescription)"
-        NSLog(errorMessage)
-        return errorMessage
-    }
-    
-    NSLog(output)
-    return "Hello, world!"
-}
-

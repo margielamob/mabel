@@ -2,20 +2,45 @@ PODS:
   - MediaPipeTasksGenAI (0.10.24):
     - MediaPipeTasksGenAIC (= 0.10.24)
   - MediaPipeTasksGenAIC (0.10.24)
+  - TensorFlowLiteC (0.0.1-nightly.20250619):
+    - TensorFlowLiteC/Core (= 0.0.1-nightly.20250619)
+  - TensorFlowLiteC/Core (0.0.1-nightly.20250619)
+  - TensorFlowLiteC/CoreML (0.0.1-nightly.20250619):
+    - TensorFlowLiteC/Core
+  - TensorFlowLiteC/Metal (0.0.1-nightly.20250619):
+    - TensorFlowLiteC/Core
+  - TensorFlowLiteSwift/Core (0.0.1-nightly.20250619):
+    - TensorFlowLiteC (= 0.0.1-nightly.20250619)
+    - TensorFlowLiteSwift/Privacy (= 0.0.1-nightly.20250619)
+  - TensorFlowLiteSwift/CoreML (0.0.1-nightly.20250619):
+    - TensorFlowLiteC/CoreML (= 0.0.1-nightly.20250619)
+    - TensorFlowLiteSwift/Core (= 0.0.1-nightly.20250619)
+    - TensorFlowLiteSwift/Privacy (= 0.0.1-nightly.20250619)
+  - TensorFlowLiteSwift/Metal (0.0.1-nightly.20250619):
+    - TensorFlowLiteC/Metal (= 0.0.1-nightly.20250619)
+    - TensorFlowLiteSwift/Core (= 0.0.1-nightly.20250619)
+    - TensorFlowLiteSwift/Privacy (= 0.0.1-nightly.20250619)
+  - TensorFlowLiteSwift/Privacy (0.0.1-nightly.20250619)
 
 DEPENDENCIES:
-  - MediaPipeTasksGenAI
-  - MediaPipeTasksGenAIC
+  - MediaPipeTasksGenAI (= 0.10.24)
+  - MediaPipeTasksGenAIC (= 0.10.24)
+  - TensorFlowLiteSwift/CoreML (~> 0.0.1-nightly)
+  - TensorFlowLiteSwift/Metal (~> 0.0.1-nightly)
 
 SPEC REPOS:
   trunk:
     - MediaPipeTasksGenAI
     - MediaPipeTasksGenAIC
+    - TensorFlowLiteC
+    - TensorFlowLiteSwift
 
 SPEC CHECKSUMS:
   MediaPipeTasksGenAI: 076ba7032a6e9da16db9c7cf0c3b67c751c18bc1
   MediaPipeTasksGenAIC: ec35d9f431f6a6b651a0bc9f67a4ed149ffa575c
+  TensorFlowLiteC: 215ef57653dd0fa09a474e7d94d79ae64a870b28
+  TensorFlowLiteSwift: 6de8da348de331778167a0f751ad74c41d8b0554
 
-PODFILE CHECKSUM: 6bb90805cb75678843757b7158815b12778a5c20
+PODFILE CHECKSUM: ed0c121bc1be38c786a3a161bf1c8dc69abe8da4
 
 COCOAPODS: 1.16.2
