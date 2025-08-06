@@ -159,3 +159,5 @@ xcuserdata
 ### SwiftPM template
 
 edgellmtest/whisper.xcframework/
+edgellmtest/*.task
+edgellmtest/*.bin
