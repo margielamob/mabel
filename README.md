@@ -99,3 +99,4 @@ To modify the model parameters:
 
 - Google's MediaPipe team for the on-device LLM inference capabilities
 - The Gemma model team for creating the open-source LLM used in this project
+- to @Sid9102
